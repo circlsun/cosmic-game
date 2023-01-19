@@ -17,6 +17,7 @@ async def blink(canvas, row, column, symbol='*'):
         canvas.addstr(row, column, symbol)
         await asyncio.sleep(0)
 
+
 def draw(canvas):
     row, column = (5, 5)
     canvas.border()
@@ -25,11 +26,11 @@ def draw(canvas):
         try:
             coroutine.send(None)
             canvas.refresh()
-            time.sleep(5)
         except StopIteration:
             break
+    time.sleep(1)
 
-  
+
 # def blink_star(canvas):
 #     row, column = (5, 5)
 #     canvas.border()
@@ -47,11 +48,8 @@ def draw(canvas):
 #         time.sleep(0.3)
 #         canvas.refresh()
 
-  
 if __name__ == '__main__':
     curses.update_lines_cols()
-    # curses.initscr()
-    # curses.curs_set(False)
+    curses.initscr()
+    curses.curs_set(False)
     curses.wrapper(draw)
-    
-    
