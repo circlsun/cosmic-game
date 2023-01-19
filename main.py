@@ -21,14 +21,27 @@ async def blink(canvas, row, column, symbol='*'):
 def draw(canvas):
     row, column = (5, 5)
     canvas.border()
-    coroutine = blink(canvas, row, column)
+    coroutine_1 = blink(canvas, row, column)
+    coroutine_2 = blink(canvas, row, column + 5)
+    coroutine_3 = blink(canvas, row, column + 10)
+    coroutine_4 = blink(canvas, row, column + 15)
+    coroutine_5 = blink(canvas, row, column + 20)
+
+    coroutines = [
+        coroutine_1,
+        coroutine_2,
+        coroutine_3,
+        coroutine_4,
+        coroutine_5
+    ]
     while True:
-        try:
-            coroutine.send(None)
-            canvas.refresh()
-        except StopIteration:
-            break
-    time.sleep(1)
+        for coroutine in coroutines.copy():
+            try:
+                coroutine.send(None)
+                canvas.refresh()
+            except StopIteration:
+                break
+        time.sleep(1)
 
 
 # def blink_star(canvas):
