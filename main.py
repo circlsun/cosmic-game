@@ -2,6 +2,8 @@ import curses
 import asyncio
 import time
 
+TIC_TIMEOUT = 0.1
+
 
 async def blink(canvas, row, column, symbol='*'):
     while True:
@@ -41,7 +43,7 @@ def draw(canvas):
                 canvas.refresh()
             except StopIteration:
                 break
-        time.sleep(1)
+        time.sleep(TIC_TIMEOUT)
 
 
 # def blink_star(canvas):
