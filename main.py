@@ -1,6 +1,7 @@
 import curses
 import asyncio
 import time
+from random import randint, choice
 
 TIC_TIMEOUT = 0.1
 
@@ -8,15 +9,16 @@ TIC_TIMEOUT = 0.1
 async def blink(canvas, row, column, symbol='*'):
     while True:
         canvas.addstr(row, column, symbol, curses.A_DIM)
-        for _ in range(40):
+        for _ in range(50):
             await asyncio.sleep(0)
 
         canvas.addstr(row, column, symbol)
-        for _ in range(10):
+        for _ in range(20):
             await asyncio.sleep(0)
 
         canvas.addstr(row, column, symbol, curses.A_BOLD)
-        await asyncio.sleep(0)
+        for _ in range(5):
+            await asyncio.sleep(0)
 
         canvas.addstr(row, column, symbol)
         for _ in range(20):
@@ -24,21 +26,16 @@ async def blink(canvas, row, column, symbol='*'):
 
 
 def draw(canvas):
-    row, column = (5, 5)
     canvas.border()
-    coroutine_1 = blink(canvas, row, column)
-    coroutine_2 = blink(canvas, row, column + 5)
-    coroutine_3 = blink(canvas, row, column + 10)
-    coroutine_4 = blink(canvas, row, column + 15)
-    coroutine_5 = blink(canvas, row, column + 20)
+    y, x = curses.window.getmaxyx(canvas)
+    symbols = ('+', ':', '.', '*')
+    coroutines = []
+    edge = 3
 
-    coroutines = [
-        coroutine_1,
-        coroutine_2,
-        coroutine_3,
-        coroutine_4,
-        coroutine_5
-    ]
+    for _ in range(150):
+        row, column = (randint(edge, y - edge), randint(edge, x - edge))
+        coroutines.append(blink(canvas, row, column, choice(symbols)))
+
     while True:
         for coroutine in coroutines.copy():
             try:
@@ -48,23 +45,6 @@ def draw(canvas):
                 break
         time.sleep(TIC_TIMEOUT)
 
-
-# def blink_star(canvas):
-#     row, column = (5, 5)
-#     canvas.border()
-#     while True:
-#         canvas.addstr(row, column, '*', curses.A_DIM)
-#         time.sleep(2)
-#         canvas.refresh()
-#         canvas.addstr(row, column, '*')
-#         time.sleep(0.3)
-#         canvas.refresh()
-#         canvas.addstr(row, column, '*', curses.A_BOLD)
-#         time.sleep(0.5)
-#         canvas.refresh()
-#         canvas.addstr(row, column, '*')
-#         time.sleep(0.3)
-#         canvas.refresh()
 
 if __name__ == '__main__':
     curses.update_lines_cols()
